@@ -42,6 +42,7 @@ public class HelloServlet extends HttpServlet {
 		html.append("<!DOCTYPE html>");
 		html.append("<html>");
 		html.append("<head>");
+		html.append("<head>");
 		html.append("<title>Home</title>");
 		html.append("</head>");
 		html.append("<body>");

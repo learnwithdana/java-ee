@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-// URL PATTERN  /sakila-web/moviesbygenre/{genre}
+// URL PATTERN  /sakila-web/movies/bygenre/{genre}
 @WebServlet("/movies/bygenre/*")
 public class MovieServletByURL extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -39,11 +39,15 @@ public class MovieServletByURL extends HttpServlet {
 		
 		String[] parts = uri.split("/");
 		if (parts.length >= 5) {
-			String genre = parts[4];
-			HashMap<String, String[]> myMovies = getMovies();
+			String genre = parts[4].toLowerCase();
+			String[] matchingMovies = getMovies(genre);
 			
 			writer.println("<h3>You are interested in " + genre + "movies.  Below are some good ones:</h3>");
-			writer.println("<p>" + myMovies.get(genre).toString() + "</p>");
+			writer.println("<ul>");
+			for(String movie : matchingMovies) {
+				writer.println("<li>" + movie + "</li>");				
+			}
+			writer.println("</ul>");
 		}
 		else {
 			writer.println("<h3>You failed to specify a genre</h3>");
@@ -51,13 +55,15 @@ public class MovieServletByURL extends HttpServlet {
 		
 	}
 	
-	protected HashMap<String, String[]> getMovies() {
+	protected String[] getMovies(String genre) {
+		// imaging this is getting the movies from a file or database or other REST API
+		// (in other words, they wouldn't be hardcoded)
 		HashMap<String, String[]> myMovies = new HashMap<String, String[]>();
 		myMovies.put("comedy", new String[] {"Dumb and Dumber", "Ace Ventura", "Rocketman"} );
-		myMovies.put("sci-fi", new String[] {"Alien", "Aliens" } );
+		myMovies.put("sci-fi", new String[] {"Alien", "Aliens"} );
 		myMovies.put("action", new String[] {"Star Wars", "Star Trek", "007"} );
 		
-		return myMovies;
+		return myMovies.get(genre);
 	}
 
 }

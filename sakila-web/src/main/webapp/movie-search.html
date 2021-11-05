@@ -12,22 +12,22 @@
 
 </head>
 <body>
-	<a href="hello">Click here to be greeted</a>
-	<br>
+
 	<p>What type of movies do you like?</p>
-
-	<a href="movies/bygenre/comedy">Comedies</a>
-	<a href="movies/bygenre/sci-fi">Sci-fi movies</a>
-	<a href="movies/bygenre/action">Action movies</a>
-
-	<br>
-	<p>What type of snack do you like?</p>
-
-	<a href="snacks/type/drinks">Drinks</a>
-	<a href="snacks/type/sweet">Sweet things</a>
-	<a href="snacks/type/salty">Salty things</a>
 	
-	<h1><a href="movie-search.html">Click for more searching</a></h1>
+	<form method="GET" action="movies/findall">
+	    1: <input type="text" name="genre"> <br>
+	    2: <input type="text" name="genre"> <br>
+	    <input type="submit" value="Submit">
+	</form>
+	
+	<p>What type of movies do you want to post to the server for your request?</p>
+	
+	<form method="POST" action="movies/postrequest">
+	    1: <input type="text" name="genre"> <br>
+	    2: <input type="text" name="genre"> <br>
+	    <input type="submit" value="Submit">
+	</form>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"

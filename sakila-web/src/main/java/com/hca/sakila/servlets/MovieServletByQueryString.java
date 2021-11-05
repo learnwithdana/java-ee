@@ -3,6 +3,7 @@ package com.hca.sakila.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,17 +11,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-
-// URL PATTERN  /sakila-web/movies/bygenre/{genre}
-@WebServlet("/movies/bygenre/*")
-public class MovieServletByURL extends HttpServlet {
+/**
+ * Servlet implementation class MovieServletByQueryString
+ */
+@WebServlet(description = "Get movies by query string", urlPatterns = { "/movies/findall" })
+public class MovieServletByQueryString extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MovieServletByURL() {
+    public MovieServletByQueryString() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,31 +30,37 @@ public class MovieServletByURL extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		PrintWriter writer = response.getWriter();
 		
+		PrintWriter writer = response.getWriter();
 		response.setContentType("text/html");
 		
-		String uri = request.getRequestURI();
-		System.out.println("********" + uri);  // example:  /sakila-web/movies/bygenre/comedy
+		// get query string parameters
+		Map<String, String[]> queryStringMap = request.getParameterMap();
 		
-		String[] parts = uri.split("/");
-		if (parts.length >= 5) {
-			String genre = parts[4].toLowerCase();
-			String[] matchingMovies = getMovies(genre);
+		if (!queryStringMap.containsKey("genre")) {
+			writer.println("<h3>No genre provided!</h3>");
+			return;
+		}
+		
+		// gets the values for the key "genre" (ex:  /movies/findall?genre=comedy&genre=action )
+		String[] allGenresPassedToThisServlet = queryStringMap.get("genre"); 
+		
+		for(String genre : allGenresPassedToThisServlet) {
+			// generate a movie genre heading
+			writer.println("<h3>" + genre + "</h3>");
 			
-			writer.println("<h3>You are interested in " + genre + " movies.  Below are some good ones:</h3>");
+			// find the movies in the specified genre
+			String[] matchingMovies = getMovies(genre);
+	
+			// generate a list of all the movies in that genre
 			writer.println("<ul>");
 			for(String movie : matchingMovies) {
-				writer.println("<li>" + movie + "</li>");				
+				writer.println("<li>" + movie + "</li>");
 			}
 			writer.println("</ul>");
 		}
-		else {
-			writer.println("<h3>You failed to specify a genre</h3>");
-		}
-		
 	}
+	
 	
 	protected String[] getMovies(String genre) {
 		// imaging this is getting the movies from a file or database or other REST API
